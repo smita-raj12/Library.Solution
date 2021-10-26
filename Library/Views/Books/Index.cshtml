@@ -1,0 +1,35 @@
+@{
+  Layout = "_Layout";
+}
+
+@using Library.Models;
+@model IEnumerable<Library.Models.Book>
+
+<h1>Welcom to the library! Here's our book list:</h1>
+
+
+@if (Model.Any())
+{
+  @using (Html.BeginForm())
+  {
+    <p>
+      Find by title: @Html.TextBox("SearchString")
+      <input type="submit" value="Search" />
+    </p>
+  }
+
+  <ul>
+    @foreach (Book book in Model)
+    {
+      <li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })</li>
+    }
+  </ul>
+}
+else
+{
+  <h3>No books have been added yet!</h3>
+}
+
+<p>@Html.ActionLink("Add new book", "Create")</p>
+
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
