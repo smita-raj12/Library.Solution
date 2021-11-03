@@ -2,10 +2,19 @@
   Layout = "_Layout";
 }
 
+
+
 @using Library.ViewModels
 
 @model RegisterViewModel
 
+
+@{
+    ViewData["Title"] = "Register";
+    var roles = (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewData["roles"];
+}
+
+<h1>@ViewData["Title"]</h1>
 <h2>Register a new user</h2>
 <hr />
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
@@ -18,6 +27,12 @@
 
     @Html.LabelFor(user=> user.ConfirmPassword)
     @Html.PasswordFor(user=> user.ConfirmPassword)
+
+     <label for="Role">Role:</label>
+    <select name="Role" id="RoleId">
+    <option value="Librarian">Librarian</option>
+    <option value="Patron">Patron</option>
+  </select>
 
     <input type="submit" value="Register" />
 }

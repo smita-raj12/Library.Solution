@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 namespace Library.Controllers
 {
-  // [Authorize]
+ 
   public class BooksController : Controller
   {
     private readonly LibraryContext _db;
@@ -24,7 +24,7 @@ namespace Library.Controllers
     }
 
     [AllowAnonymous]
-    public ActionResult Index(string searchString)
+    public  ActionResult Index(string searchString)
     {
       
             IQueryable <Book> userBooks = _db.Books.OrderByDescending(book => book.Title);
@@ -41,13 +41,13 @@ namespace Library.Controllers
       
       return View(userBooks.ToList());
     }
-    [Authorize]
+    [Authorize(Roles = "Librarian")]
     public ActionResult Create()
     {
       ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
       return View();
     }
-    [Authorize]
+    [Authorize(Roles = "Librarian")]
     [HttpPost]
     public async Task<ActionResult> Create(Book book, int AuthorId)
     {
@@ -63,7 +63,7 @@ namespace Library.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-    [AllowAnonymous]
+   [AllowAnonymous]
     public ActionResult Details(int id)
     {
       var thisBook = _db.Books
@@ -72,7 +72,7 @@ namespace Library.Controllers
           .FirstOrDefault(book => book.BookId == id);
       return View(thisBook);
     }
-    [Authorize]
+    [Authorize(Roles = "User")]
     public ActionResult Edit(int id)
     {
       var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
@@ -80,7 +80,7 @@ namespace Library.Controllers
       return View(thisBook);
     }
 
-    [Authorize]
+   [Authorize(Roles = "Librarian")]
     [HttpPost]
     public ActionResult Edit(Book book, int AuthorId)
     {
@@ -92,14 +92,14 @@ namespace Library.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-    [Authorize]
+   [Authorize(Roles = "Librarian")]
     public ActionResult AddAuthor(int id)
     {
       var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
       ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
       return View(thisBook);
     }
-    [Authorize]
+   [Authorize(Roles = "Librarian")]
     [HttpPost]
     public ActionResult AddAuthor(Book book, int AuthorId)
     {
@@ -110,13 +110,13 @@ namespace Library.Controllers
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
-     [Authorize]
+     [Authorize(Roles = "Librarian")]
     public ActionResult Delete(int id)
     {
       var thisBook = _db.Books.FirstOrDefault(book => book.BookId == id);
       return View(thisBook);
     }
-    [Authorize]
+   [Authorize(Roles = "Librarian")]
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
@@ -126,7 +126,7 @@ namespace Library.Controllers
       return RedirectToAction("Index");
     }
 
-    [Authorize]
+  [Authorize(Roles = "Librarian")]
     [HttpPost]
     public ActionResult DeleteAuthor(int joinId)
     {

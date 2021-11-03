@@ -3,14 +3,16 @@ using System;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20211103025654_newroles2")]
+    partial class newroles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,54 +138,6 @@ namespace Library.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("Library.Models.Copy", b =>
-                {
-                    b.Property<int>("CopyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CopyQuant")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCheckedOut")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.HasKey("CopyId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Copies");
-                });
-
-            modelBuilder.Entity("Library.Models.CopyBook", b =>
-                {
-                    b.Property<int>("CopyBookId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CopyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CopyBookId");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("CopyId");
-
-                    b.ToTable("CopyBook");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -342,42 +296,6 @@ namespace Library.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library.Models.Copy", b =>
-                {
-                    b.HasOne("Library.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Library.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Book");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Library.Models.CopyBook", b =>
-                {
-                    b.HasOne("Library.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Library.Models.Copy", "Copy")
-                        .WithMany("JoinEntities")
-                        .HasForeignKey("CopyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Copy");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -435,11 +353,6 @@ namespace Library.Migrations
                 });
 
             modelBuilder.Entity("Library.Models.Book", b =>
-                {
-                    b.Navigation("JoinEntities");
-                });
-
-            modelBuilder.Entity("Library.Models.Copy", b =>
                 {
                     b.Navigation("JoinEntities");
                 });
